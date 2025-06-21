@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Events</title>
+    <style>
+        body {
+            background-color: burlywood;
+            font: normal 1.5em Arial;
+        }
+
+        main {
+            background-color: white;
+            border-radius: 5px;
+            padding: 5px;
+            margin: auto;
+            width: auto;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        div#area {  
+            background: rgb(0, 142, 0);
+            color: white;
+            margin: auto;
+            width: 200px;
+            height: 200px;
+            line-height: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div id="area">
+            Interact...
+        </div>
+    </main>
+    <script>
+        var a = window.document.getElementById('area')
+        a.addEventListener('click', toclick)
+        a.addEventListener('mouseenter', toenter)
+        a.addEventListener('mouseout', goout)
+
+        function toclick(){
+            a.innerText = 'Clicked!'
+            a.style.background = 'red'
+        }
+
+        function toenter(){
+            a.innerText = 'Entered!'
+        }
+
+        function goout(){
+            a.innerText = 'It went out!'
+            a.style.background = 'rgb(0, 142, 0)'
+        }
+    </script>
+</body>
+</html>
