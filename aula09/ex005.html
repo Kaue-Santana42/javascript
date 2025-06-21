@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First steps with DOM</title>
+    <style>
+        body {
+            background-color: rgba(255, 216, 137, 0.521);
+            font: normal 1.3em Arial;
+        }
+
+        main {
+            background-color: white;
+            text-align: center;
+            margin: auto;
+            width: auto;
+            max-width: 700px;
+            border-radius: 5px;
+            box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.441);
+        }
+
+        #msg:hover {
+            cursor: pointer;
+            text-decoration: underline;
+            color: rgba(138, 1, 154, 0.789);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Starting DOM studies</h1>
+        <p>Heres comes the result</p>
+        <p>Learning to use <strong>DOM</strong> in JavaScript</p>
+        <div class="msg">Click me</div>
+        <script>
+            var corpo = window.document.body
+            var p1 = document.getElementsByTagName('p')[1]
+            /*
+            var d = document.getElementById('msg')
+            d.style.background = 'green'
+            d.innerText = 'Estou aguardando...'
+            */
+
+            var d = window.document.querySelector('div.msg')
+            d.style.background = 'blue'
+        </script>
+    </main>
+</body>
+</html>
