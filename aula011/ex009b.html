@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Are you a brazillian?</title>
+    <style>
+        body {
+            background-color: lightblue;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        main {
+            background-color: white;
+            padding: 10px;
+            margin: auto;
+            border-radius: 3px;
+            max-width: 600px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.468);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Are you a brazillian?</h1>
+        What's your country? <input type="text" name="txtcountry" id="txtcountry">
+        <input type="button" value="Check" onclick="country()">
+        <div id="txtansw"></div>
+    </main>
+    <script>
+        function country() {
+            var country = document.querySelector('input#txtcountry')
+            var answer = document.querySelector('div#txtansw')
+
+            if (country.value == 'Brazil') {
+                answer.innerHTML = `You're a <strong>brazillian</strong>`
+            } else {
+                answer.innerHTML = `You're a <strong>foreigner</strong>`
+            }
+        }
+    </script>
+</body>
+</html>

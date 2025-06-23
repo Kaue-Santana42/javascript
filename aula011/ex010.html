@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DETRAN</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: lightblue;
+        }
+
+        main {
+            background-color: white;
+            margin: auto;
+            padding: 10px;
+            max-width: 600px;
+            border-radius: 5px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.466);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            margin-bottom: 20px;
+        }
+
+        input.button {
+            border-radius: 3px;
+        }
+
+        input.button:hover {
+            cursor: pointer;
+            background-color: rgb(160, 211, 255);
+        }
+
+        input.button:active {
+            background-color: rgb(110, 183, 247);
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Fine System</h1>
+        Car's Speed <input type="number" name="txtspd" id="txtspd"> km/h
+        <input class="button" type="button" value="Check" onclick="calculate()">
+        <div id="res"></div>
+    </main>
+    <script>
+        function calculate() {
+            var txts = document.getElementById('txtspd')
+            var res = document.querySelector('div#res')
+            var spd = Number(txts.value)
+
+            res.innerHTML = `<p>Your actual speed is <strong>${spd}km/h</strong></p>`
+            if (spd > 60) {
+                res.innerHTML += `<p>You are <strong>FINED</strong> for speeding</p>`
+            }
+            res.innerHTML += `<p>Always drive with seat belt</p>`
+        }
+    </script>
+</body>
+</html>
