@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Verifier</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Age Verifier</h1>
+    </header>
+    <section>
+        <div>
+            <p>
+                Birth Year: <input type="number" name="txtyear" id="txtyear" min="0">
+            </p>
+            <p>
+                Gender: 
+                <input type="radio" name="radgender" id="mas" checked>
+                <label for="masc">Masculine</label>
+                <input type="radio" name="radgender" id="fem">
+                <label for="fem">Feminine</label>
+            </p>
+            <p>
+                <input class="button" type="button" value="Verify" onclick="verif()">
+            </p>
+            
+        </div>
+        <div id="res">
+            Fill in the informations above to see the result.
+        </div>
+    </section>
+    <footer>
+        <p>&copy; <a href="https://github.com/Kaue-Santana42" target="_blank" rel="external">Kaue-Santana42</a></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

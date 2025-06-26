@@ -1,0 +1,42 @@
+body {
+    background: rgb(130, 176, 255);
+    font: normal 15pt Arial;
+}
+
+header {
+    color: white;
+    text-align: center;
+}
+
+section {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.359);
+}
+
+input.button {
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.192);
+}
+
+input.button:hover {
+    cursor: pointer;
+    background-color: lightcyan;
+}
+
+input.button:active {
+    background-color: rgb(182, 220, 220);
+}
+
+footer {
+    color: white;
+    font-style: italic;
+    text-align: center;
+}
+
+a {
+    color: white;
+}
