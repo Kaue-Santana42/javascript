@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exercise Model</title>
+    <title>Multiplication Table</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Day Hour</h1>
+        <h1>Multiplication Table</h1>
     </header>
     <section>
         <div>
-            Testing...
+            Number: <input type="number" name="txtNumber" id="txtNumber">
+            <input type="button" value="Generate table" class="button" onclick="generate()">
         </div>
-        <div>
-            Image...
+        <div id="res">
+            <textarea name="boxRes" id="boxRes" rows="10">Type a number above</textarea>
         </div>
     </section>
     <footer>

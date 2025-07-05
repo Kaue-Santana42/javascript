@@ -1,11 +1,11 @@
 body {
     background: rgb(130, 176, 255);
     font: normal 15pt Arial;
-    text-align: center;
 }
 
 header {
     color: white;
+    text-align: center;
 }
 
 section {
@@ -17,7 +17,28 @@ section {
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.359);
 }
 
+input.button {
+    border-radius: 5px;
+    box-shadow: 0 7px rgba(0, 0, 0, 0.304);
+    cursor: pointer;
+}
+
+input.button:hover {
+    background-color: rgb(211, 235, 255);
+}
+
+input.button:active {
+    background-color: rgb(211, 235, 255);
+    box-shadow: 0 4px rgba(0, 0, 0, 0.616);
+    transform: translateY(4px);
+}
+
+#res {
+    margin-top: 20px;
+}
+
 footer {
     color: white;
     font-style: italic;
+    text-align: center;
 }
