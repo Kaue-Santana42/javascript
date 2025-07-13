@@ -6,16 +6,16 @@ function addNumber() {
 
     // Verify if the value is inside the array or if a invalid value was included
     if (num < 1 || num > 100 || array.indexOf(num) > -1) {
-        alert('Invalid value or already found')
-        inputnumber.value = ''
+        alert('Invalid value or already found') 
     } else {
         document.querySelector('div#res').innerHTML = ''
         array.push(num)
 
         let textBox = document.querySelector('textarea#boxAdd')
         textBox.innerHTML += `The number ${num} has been added \n`
-        inputnumber.value = ''
     }
+    inputnumber.value = ''
+    inputnumber.focus()
      
 }
 

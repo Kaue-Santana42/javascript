@@ -10,24 +10,21 @@
     <header>
         <h1>Number Analyzer</h1>
     </header>
-
     <section>
         <div>
             <p>
-                Number (Between 1 and 100): <input type="number" name="txtNumber" id="txtNumber"> <input type="button" value="Add" onclick="addNumber()">
+                Number (Between 1 and 100):
+                <input type="number" name="fnum" id="fnum">
+                <input type="button" value="Add" onclick="add()">
             </p>
+            <select name="flist" id="flist" size="9"></select>
+            <br>
+            <input type="button" value="Finish" onclick="finish()">
         </div>
-
-        <div>
-            <textarea name="boxAdd" id="boxAdd" rows="8" cols="30"></textarea>
+        <div id="res">
+            
         </div>
-        <input type="button" value="Finish" onclick="toArray()">
-
-        <div id="res"></div>
     </section>
-    
-
-    </div>
     <footer>
         <p>&copy; <a href="https://github.com/Kaue-Santana42">Kaue-Santana42</a></p>
     </footer>
