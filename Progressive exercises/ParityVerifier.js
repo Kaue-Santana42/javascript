@@ -13,10 +13,12 @@ do {
    
 } while (isFinite(inputNumber) == false || (inputNumber.trim() !== "") == false); // Code continues while user gives wrong inputs
 
- function parityVerifier(number) { // Check if a number is odd or even using the remainder of the division
-        if (number % 2 == 0) {
-            console.log(`The ${number} is Odd`);
-        } else {
-            console.log(`The ${number} is even`);
-        }
+// Functions
+
+function parityVerifier(number) { // Check if a number is odd or even using the remainder of the division
+    if (number % 2 == 0) {
+        console.log(`The ${number} is Odd`);
+    } else {
+        console.log(`The ${number} is even`);
     }
+}
