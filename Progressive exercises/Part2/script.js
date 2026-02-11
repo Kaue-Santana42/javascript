@@ -1,36 +1,65 @@
-// Variables
-const tasktxt = document.querySelector('#newTask-txt');
-let listSection = document.querySelector('#theList');
 
-// Add a new task written in the textbox
-document.querySelector('#addTask').addEventListener('click', () => {
+// HTML elements selection
+let tasktxt = document.querySelector('#newTask-txt');
+let taskListUI = document.querySelector('#task-list');
+
+// --Local storage section--
+
+// Load from localStorage
+// returns [] if it is empty
+const loadTasks = () => {
+    const listSaved = localStorage.getItem('savedList');
+    return listSaved ? JSON.parse(listSaved) : []; // When empty, returns null, being false
+}
+
+// Save in localStorage
+// This function will only take the array and "write" into the disk
+const syncStorage = (tasks) => {
+    localStorage.setItem('savedList', JSON.stringify(tasks));
+}
+
+// -- HTML update codes --
+// -- Render the screen --
+// This function will clean the list in the HTML and rebuild based on the array
+const renderTasks = (tasks) => {
+    taskListUI.innerHTML = ""; // Clean to not duplicate
+
+    tasks.forEach((item, index) => {
+        const li = document.createElement('li');
+
+        // Internal structure
+        li.innerHTML = `
+            <input type="checkbox" ${item.doneOrNot ? 'checked' : ''}>
+            <span>${item.task}</span>
+            <button onclick="removeTask(${index})">Delete</button>
+        `;
+
+        taskListUI.appendChild(li);
+    });
+};
+
+// Load the localStorage of the user
+let userTasks = loadTasks();
+
+// When the button is pressed, update the user task, save it, and display it
+const addNewTask = document.querySelector('#addTask').addEventListener("click", () => {
+
     if (tasktxt.value === "") { // it alerts when the input is empty
-        window.alert("Please, add a task")
+        window.alert("You must add a task!");
     } else {
-        // new task addition
-        // add the task name in a <li> tag
-        let newTask = document.createElement('li');
-        newTask.textContent = tasktxt.value;
+        let currentTask = {};
+        currentTask.task = tasktxt.value;
+        currentTask.doneOrNot = false;
 
-        // Add <label> tag
-        let newLabel = document.createElement('label');
-
-        // Add <input> tag with its attributes
-        let newisDone = document.createElement('input');
-        newisDone.type = 'checkbox';
-        newisDone.name = 'doneOrNot';
-
-        // Add text 'done' to label
-        // createTextNode() will save a text to be used when using a node insertion,
-        // such as appendChild(), different from .textContent that replace the whole tag content
-        const labelText = document.createTextNode(' done');
-
-        //Creating HTML structure
-        newLabel.appendChild(newisDone);
-        newLabel.appendChild(labelText);
-        newTask.appendChild(newLabel); // <li> will receive <label>'s text and checkbox in once
-
-        // Adding to <ul>
-        listSection.appendChild(newTask);
-    }
+        userTasks.push(currentTask); // Add the new task into the task list array
+        syncStorage(userTasks); // Save the new item
+        renderTasks(userTasks); // Display the tasks
+    }  
 });
+
+
+
+
+
+
+
