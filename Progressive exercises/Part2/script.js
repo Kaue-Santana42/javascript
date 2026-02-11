@@ -19,17 +19,21 @@ const syncStorage = (tasks) => {
 }
 
 // -- HTML update codes --
-// -- Render the screen --
+
+// Render the screen
 // This function will clean the list in the HTML and rebuild based on the array
 const renderTasks = (tasks) => {
     taskListUI.innerHTML = ""; // Clean to not duplicate
 
-    tasks.forEach((item, index) => {
+    // it will create a <li> for each object inside the array userTasks
+    tasks.forEach((item, index) => { 
         const li = document.createElement('li');
 
         // Internal structure
+        // the id for each checkbox will be task + the index number
+        // Each <li> will have a function that receives the task assign to object arrays
         li.innerHTML = `
-            <input type="checkbox" ${item.doneOrNot ? 'checked' : ''}>
+            <input type="checkbox" id="task${index}" onchange="isTaskDone(${index})" ${item.doneOrNot ? 'checked' : ''}>
             <span>${item.task}</span>
             <button onclick="removeTask(${index})">Delete</button>
         `;
@@ -40,6 +44,23 @@ const renderTasks = (tasks) => {
 
 // Load the localStorage of the user
 let userTasks = loadTasks();
+
+// Display the task list when the page loads
+window.addEventListener("load", renderTasks(userTasks));
+
+// - Buttons, checkboxes etc -
+// Check if the check is done or not and change inside the object
+const isTaskDone = (boxIndexNumber) => {
+    let checkbox = document.querySelector(`#task${boxIndexNumber}`);
+
+    if (checkbox.checked == true) {
+        userTasks[boxIndexNumber].doneOrNot = true;
+        syncStorage(userTasks);
+    } else {
+        userTasks[boxIndexNumber].doneOrNot = false;
+        syncStorage(userTasks);
+    }
+}
 
 // When the button is pressed, update the user task, save it, and display it
 const addNewTask = document.querySelector('#addTask').addEventListener("click", () => {
@@ -58,8 +79,6 @@ const addNewTask = document.querySelector('#addTask').addEventListener("click", 
 });
 
 
-
-
-
-
-
+const removeTask = (boxIndexNumber) => {
+    
+}
