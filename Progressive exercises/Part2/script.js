@@ -35,7 +35,7 @@ const renderTasks = (tasks) => {
         li.innerHTML = `
             <input type="checkbox" id="task${index}" onchange="isTaskDone(${index})" ${item.doneOrNot ? 'checked' : ''}>
             <span>${item.task}</span>
-            <button onclick="removeTask(${index})">Delete</button>
+            <button onclick="removeTask(${index})" id="deleteTask${index}">Delete</button>
         `;
 
         taskListUI.appendChild(li);
@@ -67,6 +67,8 @@ const addNewTask = document.querySelector('#addTask').addEventListener("click", 
 
     if (tasktxt.value === "") { // it alerts when the input is empty
         window.alert("You must add a task!");
+    } else if ((tasktxt.value).length > 30) {
+        window.alert("The task can not has more than 30 characters")
     } else {
         let currentTask = {};
         currentTask.task = tasktxt.value;
@@ -75,10 +77,23 @@ const addNewTask = document.querySelector('#addTask').addEventListener("click", 
         userTasks.push(currentTask); // Add the new task into the task list array
         syncStorage(userTasks); // Save the new item
         renderTasks(userTasks); // Display the tasks
-    }  
+    }
 });
 
+// When the user press 'enter', addNewTask button will be triggered
+tasktxt.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.querySelector('#addTask').click();
+    }
+});
 
 const removeTask = (boxIndexNumber) => {
     
+    if (boxIndexNumber > -1) {
+        // splice() will remove an item from an array, first parameter it's the position to start, and the second how many item wants to remove
+        userTasks.splice(boxIndexNumber, 1);
+        syncStorage(userTasks);
+        renderTasks(userTasks);
+    }
 }
