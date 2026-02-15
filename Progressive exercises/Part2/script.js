@@ -36,7 +36,7 @@ const renderTasks = (tasks) => {
             <input type="checkbox" id="task${index}" onchange="isTaskDone(${index})" ${item.doneOrNot ? 'checked' : ''}>
             <span>${item.task}</span>
             <button onclick="removeTask(${index})" id="deleteTask${index}">Delete</button>
-        `;
+        `; // Security breach, since a user could run a script on it
 
         taskListUI.appendChild(li);
     });
@@ -46,20 +46,15 @@ const renderTasks = (tasks) => {
 let userTasks = loadTasks();
 
 // Display the task list when the page loads
-window.addEventListener("load", renderTasks(userTasks));
+window.addEventListener("load", () => renderTasks(userTasks));
 
 // - Buttons, checkboxes etc -
 // Check if the check is done or not and change inside the object
 const isTaskDone = (boxIndexNumber) => {
     let checkbox = document.querySelector(`#task${boxIndexNumber}`);
 
-    if (checkbox.checked == true) {
-        userTasks[boxIndexNumber].doneOrNot = true;
-        syncStorage(userTasks);
-    } else {
-        userTasks[boxIndexNumber].doneOrNot = false;
-        syncStorage(userTasks);
-    }
+    userTasks[boxIndexNumber].doneOrNot = checkbox.checked; //checkbox.checked return value 'true' or 'false' when pressed
+    syncStorage(userTasks);
 }
 
 // When the button is pressed, update the user task, save it, and display it
@@ -77,6 +72,9 @@ const addNewTask = document.querySelector('#addTask').addEventListener("click", 
         userTasks.push(currentTask); // Add the new task into the task list array
         syncStorage(userTasks); // Save the new item
         renderTasks(userTasks); // Display the tasks
+
+        tasktxt.value = ""; // Clean the input
+        tasktxt.focus(); // Focus on input after add a task
     }
 });
 
