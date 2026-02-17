@@ -30,13 +30,26 @@ const renderTasks = (tasks) => {
         const li = document.createElement('li');
 
         // Internal structure
-        // the id for each checkbox will be task + the index number
         // Each <li> will have a function that receives the task assign to object arrays
-        li.innerHTML = `
-            <input type="checkbox" id="task${index}" onchange="isTaskDone(${index})" ${item.doneOrNot ? 'checked' : ''}>
-            <span>${item.task}</span>
-            <button onclick="removeTask(${index})" id="deleteTask${index}">Delete</button>
-        `; // Security breach, since a user could run a script on it
+
+        // checkbox attributes
+        const inputCheckbox = document.createElement('input');
+        inputCheckbox.type = "checkbox";
+        inputCheckbox.id = `task${index}`; // the id for each checkbox will be task + the index number
+        inputCheckbox.onchange = () => isTaskDone(index);
+        inputCheckbox.checked = item.doneOrNot ? true : false;
+
+        // <span> attributes
+        const spanTaskInput = document.createElement('span');
+        spanTaskInput.textContent = item.task;
+
+        // <button> attributes
+        const buttonDelete = document.createElement('button');
+        buttonDelete.onclick = () => removeTask(index);
+        buttonDelete.id = `deleteTask${index}`;
+        buttonDelete.textContent = "Delete";
+
+        li.append(inputCheckbox, spanTaskInput, buttonDelete);
 
         taskListUI.appendChild(li);
     });

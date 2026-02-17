@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+:root {
+    --backgroundColor1: #101010;
+    --highlightedText: #FAC421;
+
+    --mainTypeface: Arial, Verdana, Helvetica, sans-serif;
+    --highlightedTypeFace: 'Courier New', Courier, monospace;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+
+    background-color: var(--backgroundColor1);
+
+    
+}
+
+header {
+    color: var(--highlightedText);
+
+    font-family: var(--highlightedTypeFace);
+}
+
+main {
+    background-color: white;
+
+    padding: 40px;
+    border-radius: 15px;
+
+
+}
+
+footer {
+    color: white;
+}
