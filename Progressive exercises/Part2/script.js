@@ -35,6 +35,7 @@ const renderTasks = (tasks) => {
         // checkbox attributes
         const inputCheckbox = document.createElement('input');
         inputCheckbox.type = "checkbox";
+        inputCheckbox.classList.add('task-checkbox');
         inputCheckbox.id = `task${index}`; // the id for each checkbox will be task + the index number
         inputCheckbox.onchange = () => isTaskDone(index);
         inputCheckbox.checked = item.doneOrNot ? true : false;
@@ -50,9 +51,10 @@ const renderTasks = (tasks) => {
         const buttonDelete = document.createElement('button');
         buttonDelete.onclick = () => removeTask(index);
         buttonDelete.id = `deleteTask${index}`;
-        buttonDelete.textContent = "Delete";
+        buttonDelete.classList.add('delete-button');
+        buttonDelete.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
 
-        li.append(inputCheckbox, spanTaskInput, buttonDelete);
+        li.append(spanTaskInput, inputCheckbox, buttonDelete);
 
         taskListUI.appendChild(li);
     });
@@ -80,6 +82,7 @@ const addNewTask = document.querySelector('#addTask').addEventListener("click", 
         window.alert("You must add a task!");
     } else if ((tasktxt.value).length > 30) {
         window.alert("The task can not has more than 30 characters")
+        tasktxt.value = "";
     } else {
         let currentTask = {};
         currentTask.task = tasktxt.value;

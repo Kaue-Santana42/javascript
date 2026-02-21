@@ -12,6 +12,8 @@
     --taskTitleColor: #888;
     --buttonColor: #ffd455;
     --buttonColorHover: #FAC421;
+    --buttonDeleteColor: #680000;
+    --buttonDeleteHover: #b60101;
 
     --mainTypeface: Arial, Verdana, Helvetica, sans-serif;
     --highlightedTypeFace: 'Courier New', Courier, monospace;
@@ -43,10 +45,19 @@ main {
     border-radius: 15px;
 }
 
+section.input-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 input#newTask-txt {
     border: 3px solid black;
     border-radius: 5px;
     
+    flex: 1 0;
+    max-width: 50%;
+
     padding: 5px 0px;
 }
 
@@ -73,14 +84,8 @@ button#addTask:active {
     transform: translateY(0px);
 }
 
-section {
-    display: flex;
-    flex-direction: column;
-    
-}
-
 section > h2 {
-    margin-top: 10px;
+    margin: 10px 0px;
 
     color: var(--taskTitleColor);
 
@@ -89,17 +94,42 @@ section > h2 {
     text-align: center;
 }
 
-li {
-    margin: 10px 0px;
+ul#task-list {
+    display: flex;
+    flex-flow: column wrap;
+    gap: 10px;
+    max-height: 70dvh;
 }
 
 span.task-text {
     margin: 0px 5px;
+    font-size: 1.2em;
+}
+
+input.task-checkbox {
+    
+}
+
+.delete-button {
+    background-color: transparent;
+    border: none;
+    margin: 0px 8px;
+    color: var(--buttonDeleteColor);
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    color: var(--buttonDeleteHover);
+    transform: translateY(-2px);
+}
+
+.delete-button:active {
+    transform: translateY(0px);
 }
 
 footer {
     color: white;
-
     font-family: var(--highlightedTypeFace);
 }
 
