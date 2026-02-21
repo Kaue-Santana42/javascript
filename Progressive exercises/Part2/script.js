@@ -43,6 +43,9 @@ const renderTasks = (tasks) => {
         const spanTaskInput = document.createElement('span');
         spanTaskInput.textContent = item.task;
 
+        // <span> css class
+        spanTaskInput.classList.add('task-text');
+
         // <button> attributes
         const buttonDelete = document.createElement('button');
         buttonDelete.onclick = () => removeTask(index);
