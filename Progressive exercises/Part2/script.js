@@ -29,6 +29,7 @@ const renderTasks = (tasks) => {
     tasks.forEach((item, index) => { 
         const label = document.createElement('label');
         label.classList.add('tasks-added');
+        label.ariaLabel = "Mark as done";
 
         const li = document.createElement('li');
         // Internal structure
@@ -53,6 +54,10 @@ const renderTasks = (tasks) => {
 
         // <span> text css class
         spanTaskInput.classList.add('task-text');
+        if (item.doneOrNot) {
+            spanTaskInput.classList.add('crossed');
+            spanTaskInput.style.color = "var(--buttonDoneColor)";
+        }
 
         // <button> attributes
         const buttonDelete = document.createElement('button');
