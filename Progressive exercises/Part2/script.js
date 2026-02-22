@@ -27,8 +27,10 @@ const renderTasks = (tasks) => {
 
     // it will create a <li> for each object inside the array userTasks
     tasks.forEach((item, index) => { 
-        const li = document.createElement('li');
+        const label = document.createElement('label');
+        label.classList.add('tasks-added');
 
+        const li = document.createElement('li');
         // Internal structure
         // Each <li> will have a function that receives the task assign to object arrays
 
@@ -40,11 +42,16 @@ const renderTasks = (tasks) => {
         inputCheckbox.onchange = () => isTaskDone(index);
         inputCheckbox.checked = item.doneOrNot ? true : false;
 
-        // <span> attributes
+        // <span> for fontawesome
+        const spanIcon = document.createElement('span');
+        spanIcon.classList.add('done-icon');
+        spanIcon.innerHTML = `<i class="fa-regular fa-circle-check"></i>`;
+        // <span> text attributes
         const spanTaskInput = document.createElement('span');
         spanTaskInput.textContent = item.task;
+        spanTaskInput.id = `task-txt${index}`;
 
-        // <span> css class
+        // <span> text css class
         spanTaskInput.classList.add('task-text');
 
         // <button> attributes
@@ -54,8 +61,8 @@ const renderTasks = (tasks) => {
         buttonDelete.classList.add('delete-button');
         buttonDelete.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
 
-        li.append(spanTaskInput, inputCheckbox, buttonDelete);
-
+        label.append(inputCheckbox, spanIcon);
+        li.append(spanTaskInput,label, buttonDelete);
         taskListUI.appendChild(li);
     });
 };
@@ -72,7 +79,20 @@ const isTaskDone = (boxIndexNumber) => {
     let checkbox = document.querySelector(`#task${boxIndexNumber}`);
 
     userTasks[boxIndexNumber].doneOrNot = checkbox.checked; //checkbox.checked return value 'true' or 'false' when pressed
+
+    // task is crossed out when done and it color changes
+    let spanDone = document.querySelector(`#task-txt${boxIndexNumber}`);
+
+    if (userTasks[boxIndexNumber].doneOrNot) {
+        spanDone.classList.add('crossed');
+        spanDone.style.color = "var(--buttonDoneColor)";
+    } else {
+        spanDone.classList.remove('crossed');
+        spanDone.style.color = "initial";
+    }
+
     syncStorage(userTasks);
+    
 }
 
 // When the button is pressed, update the user task, save it, and display it

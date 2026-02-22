@@ -6,6 +6,7 @@
     box-sizing: border-box;
 }
 
+/* Variables for the site */
 :root {
     --backgroundColor1: #101010;
     --highlightedText: #FAC421;
@@ -14,6 +15,9 @@
     --buttonColorHover: #FAC421;
     --buttonDeleteColor: #680000;
     --buttonDeleteHover: #b60101;
+    --buttonDoneColor: #A9A9A9;
+    --buttonDoneHover: #AFE1AF;
+    --buttonDoneColorPressed: #32CD32;
 
     --mainTypeface: Arial, Verdana, Helvetica, sans-serif;
     --highlightedTypeFace: 'Courier New', Courier, monospace;
@@ -44,13 +48,13 @@ main {
     margin: 20px;
     border-radius: 15px;
 }
-
+/* Input Section */
 section.input-section {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
+/* The input will grow when more tasks were added*/
 input#newTask-txt {
     border: 3px solid black;
     border-radius: 5px;
@@ -83,7 +87,7 @@ button#addTask:hover {
 button#addTask:active {
     transform: translateY(0px);
 }
-
+/* Output Section */
 section > h2 {
     margin: 10px 0px;
 
@@ -102,14 +106,60 @@ ul#task-list {
 }
 
 span.task-text {
+    position: relative;
+    display: inline-block;
+
     margin: 0px 5px;
     font-size: 1.2em;
+
+    transition: 0.5s ease;
+}
+/* Line-through draw effect left to right */
+span.task-text::before {
+    content: '';
+    position: absolute;
+    top: 50%; /* Position in the middle of the text */
+    left: 0;
+    width: 0; /* Start with zero width */
+    height: 2px; /* Set the line thickness */
+    background-color: var(--buttonDoneColor); /* Set the line color */
+    transition: width 0.5s ease; 
+}
+/* When the task is done, js will create a class that will cross out the task. */
+span.task-text.crossed::before {
+    width: 100%;
 }
 
-input.task-checkbox {
-    
+span.done-icon {
+    margin-left: 5px;
+}
+/* Here, the checkbox is replaced for an icon */
+label.tasks-added > input.task-checkbox {
+    display: none;
 }
 
+label.tasks-added > span.done-icon {
+    display: inline-block;
+    cursor: pointer;
+    color: var(--buttonDoneColor);
+
+    transition: 0.2s ease;
+}
+
+label.tasks-added > span.done-icon:hover {
+    color: var(--buttonDoneHover);
+    transform: translateY(-2px);
+}
+
+label.tasks-added > span.done-icon:active {
+    color: var(--buttonDoneColorPressed);
+    transform: translateY(0px);
+}
+
+label.tasks-added > input.task-checkbox:checked + span.done-icon {
+    color: var(--buttonDoneColorPressed);
+}
+/* Unlike the correct icon, delete is already a button, then is easier to maneuver */
 .delete-button {
     background-color: transparent;
     border: none;
@@ -117,6 +167,8 @@ input.task-checkbox {
     color: var(--buttonDeleteColor);
     font-size: 1.1em;
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .delete-button:hover {
@@ -127,7 +179,7 @@ input.task-checkbox {
 .delete-button:active {
     transform: translateY(0px);
 }
-
+/* Footer section */
 footer {
     color: white;
     font-family: var(--highlightedTypeFace);
