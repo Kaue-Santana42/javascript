@@ -1,0 +1,80 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+:root {
+    --focusBackground: linear-gradient(to top, #101010 0%, #4D360A 35%, #FAAD14 100%);
+    --UIBackground: #ffffff;
+
+    --focusButtonColor: #FAAD14;
+    /* --shortbreakButtonColor: ;
+    --longbreakButtonColor: ; */
+
+    --asideFontColor: #ffffff;
+    --mainTypeFace: Arial, Verdana, Helvetica, sans-serif;
+    --highlightedTypeFacea: "Michroma", sans-serif;
+    --asideTypeFace: 'Courier New', Courier, monospace;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100dvh;
+
+    background-image: var(--focusBackground);
+}
+
+header {
+    margin: 1% 0%;
+    font-family: var(--highlightedTypeFacea);
+    
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5em;
+
+    height: 70dvh;
+    width: 60dvw;
+
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    font-family: var(--mainTypeFace);
+}
+
+#theTimer {
+    font-size: 4em;
+}
+
+#sectionTimerController {
+    display: flex;
+    gap: 5em;
+}
+
+.button {
+    border: 1px solid black;
+
+    border-radius: 5px;
+    padding: 5px;
+
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+footer {
+    margin: 1% 0%;
+
+    color: var(--asideFontColor);
+    font-family: var(--asideTypeFace);
+}
