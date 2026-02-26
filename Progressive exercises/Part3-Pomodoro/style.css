@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 * {
     margin: 0px;
     padding: 0px;
@@ -8,7 +10,8 @@
     --focusBackground: linear-gradient(to top, #101010 0%, #4D360A 35%, #FAAD14 100%);
     --UIBackground: #ffffff;
 
-    --focusButtonColor: #FAAD14;
+    --focusButtonTextColor: #ffffff;
+    --focusButtonColor: linear-gradient(310deg, #101010 0%, #4D360A 35%, #FAAD14 100%);
     /* --shortbreakButtonColor: ;
     --longbreakButtonColor: ; */
 
@@ -40,8 +43,9 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5em;
+    gap: 8em;
 
+    padding: 15px;
     height: 70dvh;
     width: 60dvw;
 
@@ -52,20 +56,30 @@ main {
     font-family: var(--mainTypeFace);
 }
 
+main > h2 {
+    font-size: 3em;
+}
+
 #theTimer {
     font-size: 4em;
 }
 
 #sectionTimerController {
     display: flex;
-    gap: 5em;
+    gap: 4em;
 }
 
-.button {
-    border: 1px solid black;
 
-    border-radius: 5px;
+
+.button {
+    flex: 1; /* All butttons will have same width*/
     padding: 5px;
+    background-image: var(--focusButtonColor);
+
+    color: var(--focusButtonTextColor);
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.214);
+    border: 1px solid black;
+    border-radius: 5px;
 
     font-size: 1.1em;
     font-weight: bold;
