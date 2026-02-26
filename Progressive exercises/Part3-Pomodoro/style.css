@@ -11,7 +11,7 @@
     --UIBackground: #ffffff;
 
     --focusButtonTextColor: #ffffff;
-    --focusButtonColor: linear-gradient(310deg, #101010 0%, #4D360A 35%, #FAAD14 100%);
+    --focusButtonColor: #101010 0%, #4D360A 35%, #FAAD14 100%;
     /* --shortbreakButtonColor: ;
     --longbreakButtonColor: ; */
 
@@ -69,12 +69,17 @@ main > h2 {
     gap: 4em;
 }
 
-
+/* Properties for button gradient's animation */
+@property --gradient-angle {
+    syntax: "<angle>";
+    initial-value: 310deg;
+    inherits: false;
+}
 
 .button {
     flex: 1; /* All butttons will have same width*/
     padding: 5px;
-    background-image: var(--focusButtonColor);
+    background-image: linear-gradient(var(--gradient-angle), var(--focusButtonColor)); /* var for angle and var for color*/
 
     color: var(--focusButtonTextColor);
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.214);
@@ -84,6 +89,13 @@ main > h2 {
     font-size: 1.1em;
     font-weight: bold;
     cursor: pointer;
+
+    transition: --gradient-angle 0.5s ease, transform 0.5s ease;
+}
+
+.button:hover {
+    transform: scale(1.05);
+    --gradient-angle: 130deg;
 }
 
 footer {
