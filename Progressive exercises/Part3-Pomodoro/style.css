@@ -7,18 +7,38 @@
 }
 
 :root {
-    --focusBackground: linear-gradient(to top, #101010 0%, #4D360A 35%, #FAAD14 100%);
     --UIBackground: #ffffff;
+    --timerBackground: #ffffff;
 
     --focusButtonTextColor: #ffffff;
-    --focusButtonColor: #101010 0%, #4D360A 35%, #FAAD14 100%;
+    --focusButtonColor: #101010 0%, #6E3232 35%, #C42727 100%;
     /* --shortbreakButtonColor: ;
     --longbreakButtonColor: ; */
 
+    --mainFontColor: #000000;
     --asideFontColor: #ffffff;
     --mainTypeFace: Arial, Verdana, Helvetica, sans-serif;
     --highlightedTypeFacea: "Michroma", sans-serif;
     --asideTypeFace: 'Courier New', Courier, monospace;
+}
+
+/* Property for background gradient colors */
+@property --background-color-one {
+    syntax: '<color>';
+    initial-value: #101010;
+    inherits: false;
+}
+
+@property --background-color-two {
+    syntax: '<color>';
+    initial-value: #6E3232;
+    inherits: false;
+}
+
+@property --background-color-three {
+    syntax: '<color>';
+    initial-value: #C42727;
+    inherits: false;
 }
 
 body {
@@ -29,13 +49,13 @@ body {
 
     height: 100dvh;
 
-    background-image: var(--focusBackground);
+    background-image: linear-gradient(to top, var(--background-color-one) 0%, var(--background-color-two) 35%, var(--background-color-three) 100%);
 }
 
 header {
     margin: 1% 0%;
     font-family: var(--highlightedTypeFacea);
-    
+    color: var(--asideFontColor);
 }
 
 main {
@@ -51,22 +71,50 @@ main {
 
     border-radius: 10px;
 
-    background-color: #ffffff;
+    background-color: var(--timerBackground);
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.264);
 
     font-family: var(--mainTypeFace);
+    color: var(--mainFontColor);
 }
 
-main > h2 {
+#timerTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#timerTitle h2 {
+    margin-left: auto;
+    margin-right: auto;
     font-size: 3em;
+}
+
+#buttonSettings {
+    align-self: first baseline;
+    background-color: transparent;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+
+    transition: transform 1s ease;
+}
+
+#buttonSettings:hover {
+    transform: rotate(180deg);
 }
 
 #theTimer {
     font-size: 4em;
 }
 
-#sectionTimerController {
+#sectionBreakController {
     display: flex;
     gap: 4em;
+    justify-content: space-between;
+    width: 80%;
+    height: 4em;
 }
 
 /* Properties for button gradient's animation */
@@ -103,4 +151,14 @@ footer {
 
     color: var(--asideFontColor);
     font-family: var(--asideTypeFace);
+}
+
+footer a {
+    color: var(--asideFontColor);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }

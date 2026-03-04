@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="images/faviconAim.svg" type="image/x-icon">
-    <!-- Extra fonts -->
+    <!-- Extra fonts and icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/257557e977.js" crossorigin="anonymous"></script>
     <!-- Website -->
     <title>Pomodoro & Mood Tracker</title>
 </head>
@@ -17,13 +19,18 @@
         <h1>Pomodoro & Mood Tracker</h1>
     </header>
     <main>
-        <h2>Timer</h2>
+        <section id="timerTitle">
+            <h2>Timer</h2>
+            <button type="button" id="buttonSettings">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+        </section>
         <section id="sectionTimer">
             <div id="theTimer">
                 00:00
             </div>
         </section>
-        <section id="sectionTimerController">
+        <section id="sectionBreakController">
             <button type="button" class="button" id="buttonFocus">Focus</button>
             <button type="button" class="button" id="buttonShortBreak">Short Break</button>
             <button type="button" class="button" id="buttonLongBreak">Long Break</button>
