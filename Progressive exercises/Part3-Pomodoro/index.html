@@ -18,24 +18,50 @@
     <header>
         <h1>Pomodoro & Mood Tracker</h1>
     </header>
+
     <main>
         <section id="timerTitle">
             <h2>Timer</h2>
-            <button type="button" id="buttonSettings">
-                <i class="fa-solid fa-gear"></i>
-            </button>
+            <section id="settings">
+                <button type="button" class="buttonHeader" id="buttonSound">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <button type="button" class="buttonHeader" id="buttonSettings">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </section>
         </section>
+
         <section id="sectionTimer">
             <div id="theTimer">
                 00:00
             </div>
         </section>
+
         <section id="sectionBreakController">
             <button type="button" class="button" id="buttonFocus">Focus</button>
             <button type="button" class="button" id="buttonShortBreak">Short Break</button>
             <button type="button" class="button" id="buttonLongBreak">Long Break</button>
         </section>
     </main>
+
+    <div id="settingsControlPanel">
+        <aside>
+            <div>
+                <p>Focus Time: <output>25</output> minutes</p>
+                <input type="range" min="25" max="60" value="25" id="focusTimeScrollValue">
+            </div>
+            <div>
+                <p>Short Break Time: <output>5</output> minutes</p>
+                <input type="range" min="5" max="15" value="5" id="shortTimeScrollValue">
+            </div>
+            <div>
+                <p>Long Break Time: <output>15</output> minutes</p>
+                <input type="range" min="15" max="30" value="15" id="longTimeScrollValue">
+            </div>
+        </aside>
+    </div>
+
     <footer>
         <p>Created by <a href="https://github.com/Kaue-Santana42" target="_blank" rel="external">Kaue-Santana42</a></p>
     </footer>

@@ -1,3 +1,42 @@
+// --- CSS Section ---
+
+// -- Settings Buttons --
+// Open side panel
+document.querySelector('#settings').addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        const buttonId = event.target.id;
+
+        switch (buttonId) {
+            case 'buttonSettings':
+                const sidePanel = document.querySelector('#settingsControlPanel');
+                sidePanel.classList.toggle('open'); // create or remove a class if it exists or not.
+                break;
+            case 'buttonSound':
+                break;
+        }
+    }
+});
+
+// Time settings
+document.querySelector('#settingsControlPanel').addEventListener('input', (event) => {
+    if (event.target.tagName === 'INPUT') {
+        const inputId = event.target.id;
+
+        switch (inputId) {
+            case 'focusTimeScrollValue':
+                const focusTimeOutput = event.target.closest('OUTPUT');
+                focusTimeOutput.textContent = inputId.value;
+                break;
+            case 'shortTimeScrollValue':
+                break;
+            case 'longTimeScrollValue':
+                break;
+        }
+    }
+});
+
+// --- Logic Section ---
+
 // -- Time Settings --
 
 const timeSettings = {
@@ -44,4 +83,4 @@ document.querySelector('#sectionBreakController').addEventListener('click', (eve
                 break;
         }
     }
-})
+});

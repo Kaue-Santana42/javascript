@@ -17,6 +17,7 @@
 
     --mainFontColor: #000000;
     --asideFontColor: #ffffff;
+    --asideBackgroundColor: #ffffff;
     --mainTypeFace: Arial, Verdana, Helvetica, sans-serif;
     --highlightedTypeFacea: "Michroma", sans-serif;
     --asideTypeFace: 'Courier New', Courier, monospace;
@@ -79,25 +80,36 @@ main {
 }
 
 #timerTitle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
 }
 
 #timerTitle h2 {
-    margin-left: auto;
-    margin-right: auto;
+    justify-self: center;
+    transform: translateX(10px); /* Center it */
     font-size: 3em;
 }
 
-#buttonSettings {
+#settings {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 5px;
+}
+
+.buttonHeader {
     align-self: first baseline;
     background-color: transparent;
     border: none;
     font-size: 1.4em;
     cursor: pointer;
+}
 
+i {
+    pointer-events: none; /* It ensures that Event Delegation works */
+}
+
+#buttonSettings {
     transition: transform 1s ease;
 }
 
@@ -144,6 +156,40 @@ main {
 .button:hover {
     transform: scale(1.05);
     --gradient-angle: 130deg;
+}
+
+/* Control Panel for time settings */
+
+#settingsControlPanel {
+    position: fixed;
+    height: 50%;
+    width: 20vw;
+    top: 0;
+    right: 0; /* It will be showed on the right side */
+
+    background-color: var(--asideBackgroundColor);
+    border-radius: 10px;
+    box-shadow: -10px 1px 10px rgba(0, 0, 0, 0.241);
+
+    z-index: 1000;
+    overflow-x: hidden;
+
+    transform: translateX(102%);
+    transition: transform 0.5s ease;
+}
+
+#settingsControlPanel.open {
+    transform: translateX(0);
+}
+
+aside {
+    font-family: var(--mainTypeFace);
+
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20%;
+    padding: 20px 10px;
 }
 
 footer {
