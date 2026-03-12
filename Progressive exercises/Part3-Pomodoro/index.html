@@ -36,6 +36,11 @@
             <div id="theTimer">
                 00:00
             </div>
+            <div id="timerControls">
+                <button type="button" class="timeControlButton" id="buttonPlayPause">
+                    <i class="fa-solid fa-play"></i>
+                </button>
+            </div>
         </section>
 
         <section id="sectionBreakController">
@@ -49,15 +54,15 @@
         <aside>
             <div>
                 <p>Focus Time: <output>25</output> minutes</p>
-                <input type="range" min="25" max="60" value="25" id="focusTimeScrollValue">
+                <input type="range" min="25" max="60" value="25" class="slider" id="focusTimeScrollValue">
             </div>
             <div>
                 <p>Short Break Time: <output>5</output> minutes</p>
-                <input type="range" min="5" max="15" value="5" id="shortTimeScrollValue">
+                <input type="range" min="5" max="15" value="5" class="slider" id="shortTimeScrollValue">
             </div>
             <div>
                 <p>Long Break Time: <output>15</output> minutes</p>
-                <input type="range" min="15" max="30" value="15" id="longTimeScrollValue">
+                <input type="range" min="15" max="30" value="15" class="slider" id="longTimeScrollValue">
             </div>
         </aside>
     </div>

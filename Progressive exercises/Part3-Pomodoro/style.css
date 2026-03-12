@@ -16,10 +16,14 @@
     --longbreakButtonColor: ; */
 
     --mainFontColor: #000000;
-    --asideFontColor: #ffffff;
-    --asideBackgroundColor: #ffffff;
     --mainTypeFace: Arial, Verdana, Helvetica, sans-serif;
     --highlightedTypeFacea: "Michroma", sans-serif;
+
+    --asideSliderBackColor: #101010;
+    --asideSliderBorderColor: #C42727;
+
+    --asideFontColor: #ffffff;
+    --asideBackgroundColor: #ffffff;
     --asideTypeFace: 'Courier New', Courier, monospace;
 }
 
@@ -121,6 +125,29 @@ i {
     font-size: 4em;
 }
 
+#sectionTimer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 5px;
+}
+
+#sectionTimer button:hover {
+    transform: scale(1.2);
+}
+
+#sectionTimer button:active {
+    transform: scale(1);
+}
+
+.timeControlButton {
+    background-color: transparent;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+}
+
 #sectionBreakController {
     display: flex;
     gap: 4em;
@@ -190,6 +217,15 @@ aside {
     flex-direction: column;
     gap: 20%;
     padding: 20px 10px;
+}
+
+input.slider {
+    appearance: none;
+    width: 100%;
+    height: 15px;
+    background: var(--asideSliderBackColor);
+    border: 6px solid var(--asideSliderBorderColor);
+    border-radius: 8px;
 }
 
 footer {
