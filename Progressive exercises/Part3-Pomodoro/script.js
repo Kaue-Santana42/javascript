@@ -1,8 +1,10 @@
 // -- Get HTML elements --
 const displayTimer = document.querySelector('#theTimer');
 
-// -- Global Variables --
-let timerInterval = 0;
+// Global Variable
+let timeLeft; 
+let isRunning = false;
+
 // --- CSS Section ---
 
 // -- Settings Buttons --
@@ -21,6 +23,22 @@ document.querySelector('#settings').addEventListener('click', (event) => {
         }
     }
 });
+
+// This function will swap the timer play Icon
+const swapPlayerDisplay = (isRunning) => {
+    const playIcon = document.querySelector('#playPause');
+    if (isRunning) {
+        playIcon.classList.replace('fa-play', 'fa-pause');
+    } else {
+        playIcon.classList.replace('fa-pause', 'fa-play');
+    }
+}
+
+// Changing background and buttons color according the mode
+
+
+// -- Sound Section --
+
 
 // --- Logic Section ---
 
@@ -88,6 +106,10 @@ document.querySelector('#settingsControlPanel').addEventListener('input', (event
 });
 
 // -- Button Timer Script -- 
+
+// Variables for time running
+let timerId = null; // It will save the 
+
 // Event Delegation for break control buttons
 document.querySelector('#sectionBreakController').addEventListener('click', (event) => {
     // It ensures that a buttons is being clicked
@@ -98,22 +120,56 @@ document.querySelector('#sectionBreakController').addEventListener('click', (eve
         switch (buttonId) {
             case 'buttonFocus':
                 displayTimer.textContent = formatTime(timeSettings.workTime);
+                timeLeft = timeSettings.workTime;
                 buttonPressed = 1;
+
+                isRunning && document.querySelector('#buttonPlayPause').click(); // If the user changes the mode while the time is running, it will stop
                 break;
             case 'buttonShortBreak':
                 displayTimer.textContent = formatTime(timeSettings.shortBreak);
+                timeLeft = timeSettings.shortBreak;
                 buttonPressed = 2;
+
+                isRunning && document.querySelector('#buttonPlayPause').click();
                 break;
             case 'buttonLongBreak':
                 displayTimer.textContent = formatTime(timeSettings.longBreak);
+                timeLeft = timeSettings.longBreak;
                 buttonPressed = 3;
+
+                isRunning && document.querySelector('#buttonPlayPause').click();
                 break;
         }
     }
 });
 
 // -- Timer starter script --
-const startTimer = document.querySelector('#buttonPlayPause').addEventListener ('click', () => {
-    let timeLeft;
+const toggleTimer = document.querySelector('#buttonPlayPause').addEventListener("click", () => {
+    if (buttonPressed == 0) {
+        window.alert('Please, select a mode');
+    } else {
+        if (isRunning) {
+            // Pausing
+            clearInterval(timerId);
+            timerId = null;
+            isRunning = false;
+
+            swapPlayerDisplay(isRunning);
+        } else {
+            // Starting
+            isRunning = true;
+            swapPlayerDisplay(isRunning);
+
+            timerId = setInterval(() => {
+            timeLeft--; // Remove 1 second
+            displayTimer.textContent = formatTime(timeLeft);
+
+            if (timeLeft <= 0) {
+                clearInterval(timerId);
+                timerId = null;
+            }
+        }, 1000);
+    }
+    }
 
 });
