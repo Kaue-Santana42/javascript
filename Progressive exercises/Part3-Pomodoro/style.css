@@ -11,7 +11,7 @@
     --timerBackground: #ffffff;
 
     --focusButtonTextColor: #ffffff;
-    --focusButtonColor: #101010 0%, #6E3232 35%, #C42727 100%;
+    --buttonColor: #101010 0%, #6E3232 35%, #C42727 100%;
     /* --shortbreakButtonColor: #101010 0%, #2E2E59 35%, #2734C4 100%;
     --longbreakButtonColor: ; */
 
@@ -55,6 +55,8 @@ body {
     height: 100dvh;
 
     background-image: linear-gradient(to top, var(--background-color-one) 0%, var(--background-color-two) 35%, var(--background-color-three) 100%);
+
+    transition: --background-color-one 0.7s ease, --background-color-two 0.7s ease, --background-color-three 0.7s ease;
 }
 
 header {
@@ -166,7 +168,7 @@ i {
 .button {
     flex: 1; /* All butttons will have same width*/
     padding: 5px;
-    background-image: linear-gradient(var(--gradient-angle), var(--focusButtonColor)); /* var for angle and var for color*/
+    background-image: linear-gradient(var(--gradient-angle), var(--buttonColor)); /* var for angle and var for color*/
 
     color: var(--focusButtonTextColor);
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.214);

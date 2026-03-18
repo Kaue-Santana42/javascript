@@ -35,7 +35,32 @@ const swapPlayerDisplay = (isRunning) => {
 }
 
 // Changing background and buttons color according the mode
+const focusBackground = () => {
+    const bodyBackground = document.querySelector('body');
+    bodyBackground.style.setProperty('--background-color-two', '#6E3232');
+    bodyBackground.style.setProperty('--background-color-three', '#C42727');
 
+    document.documentElement.style.setProperty('--buttonColor', '#101010 0%, #6E3232 35%, #C42727 100%');
+    document.documentElement.style.setProperty('--asideSliderBorderColor', '#C42727');
+}
+
+const shortBreakBackground = () => {
+    const bodyBackground = document.querySelector('body');  
+    bodyBackground.style.setProperty('--background-color-two', '#2E2E59');
+    bodyBackground.style.setProperty('--background-color-three', '#2734C4');
+
+    document.documentElement.style.setProperty('--buttonColor', '#101010 0%, #2E2E59 35%, #2734C4 100%');
+    document.documentElement.style.setProperty('--asideSliderBorderColor', '#2734C4');
+}
+
+const longBreakBackground = () => {
+    const bodyBackground = document.querySelector('body');  
+    bodyBackground.style.setProperty('--background-color-two', '#251D3B');
+    bodyBackground.style.setProperty('--background-color-three', '#6127C4');
+
+    document.documentElement.style.setProperty('--buttonColor', '#101010 0%, #251D3B 35%, #6127C4 100%');
+    document.documentElement.style.setProperty('--asideSliderBorderColor', '#6127C4');
+}
 
 // -- Sound Section --
 
@@ -45,9 +70,9 @@ const swapPlayerDisplay = (isRunning) => {
 // -- Time Settings --
 
 let timeSettings = {
-    workTime: 25 * 60, // 25 minutes in seconds
-    shortBreak: 5 * 60,
-    longBreak: 15 * 60
+    workTime: 0.1 * 60, // 25 minutes in seconds
+    shortBreak: 0.1 * 60,
+    longBreak: 0.1 * 60
 };
 
 // -- Time formatter -- 
@@ -105,10 +130,30 @@ document.querySelector('#settingsControlPanel').addEventListener('input', (event
     }
 });
 
-// -- Button Timer Script -- 
+// Modes script functions
 
-// Variables for time running
-let timerId = null; // It will save the 
+const focusMode = () => {
+    displayTimer.textContent = formatTime(timeSettings.workTime);
+    timeLeft = timeSettings.workTime;
+    buttonPressed = 1;
+    focusBackground();
+}
+
+const shortBreakMode = () => {
+    displayTimer.textContent = formatTime(timeSettings.shortBreak);
+    timeLeft = timeSettings.shortBreak;
+    buttonPressed = 2;
+    shortBreakBackground();
+}
+
+const longBreakMode = () => {
+    displayTimer.textContent = formatTime(timeSettings.longBreak);
+    timeLeft = timeSettings.longBreak;
+    buttonPressed = 3;
+    longBreakBackground();
+}
+
+// -- Button Timer Script -- 
 
 // Event Delegation for break control buttons
 document.querySelector('#sectionBreakController').addEventListener('click', (event) => {
@@ -119,29 +164,44 @@ document.querySelector('#sectionBreakController').addEventListener('click', (eve
         // Logic for each button based on the ID
         switch (buttonId) {
             case 'buttonFocus':
-                displayTimer.textContent = formatTime(timeSettings.workTime);
-                timeLeft = timeSettings.workTime;
-                buttonPressed = 1;
+                focusMode();
 
                 isRunning && document.querySelector('#buttonPlayPause').click(); // If the user changes the mode while the time is running, it will stop
                 break;
             case 'buttonShortBreak':
-                displayTimer.textContent = formatTime(timeSettings.shortBreak);
-                timeLeft = timeSettings.shortBreak;
-                buttonPressed = 2;
+                shortBreakMode();
 
                 isRunning && document.querySelector('#buttonPlayPause').click();
                 break;
             case 'buttonLongBreak':
-                displayTimer.textContent = formatTime(timeSettings.longBreak);
-                timeLeft = timeSettings.longBreak;
-                buttonPressed = 3;
+                longBreakMode();
 
                 isRunning && document.querySelector('#buttonPlayPause').click();
                 break;
         }
     }
 });
+
+// Variables for time running
+let timerId = null; // Used for stopping the setInterval()
+
+let pomodoroCounter = 0; // It will count how many pomodoro has been finished
+
+const swapMoodMode = (pomodoroFinished) => {
+    if (buttonPressed == 1 && pomodoroFinished == 3) {
+        longBreakMode();
+        pomodoroCounter = 0;
+        buttonPressed = 3;
+    } else if (buttonPressed == 1 && pomodoroFinished !== 3) {
+        shortBreakMode();
+        buttonPressed = 2;
+    }
+
+    if (buttonPressed == 2 || buttonPressed == 3) {
+        focusMode();
+        buttonPressed = 1;
+    }
+}
 
 // -- Timer starter script --
 const toggleTimer = document.querySelector('#buttonPlayPause').addEventListener("click", () => {
@@ -165,6 +225,12 @@ const toggleTimer = document.querySelector('#buttonPlayPause').addEventListener(
             displayTimer.textContent = formatTime(timeLeft);
 
             if (timeLeft <= 0) {
+                isRunning = false;
+                swapPlayerDisplay(isRunning);
+                
+                buttonPressed == 1 && (pomodoroCounter += 1);
+                swapMoodMode(pomodoroCounter);
+
                 clearInterval(timerId);
                 timerId = null;
             }
