@@ -1,11 +1,28 @@
 // -- Get HTML elements --
 const displayTimer = document.querySelector('#theTimer');
+const sidePanel = document.querySelector('#settingsControlPanel');
 
 // Global Variable
 let timeLeft; 
 let isRunning = false;
 
 // --- CSS Section ---
+
+// Favicon Swapping
+const swapFavicon = (currentMode) => {
+    const favicon = document.querySelector('#favicon');
+    switch (currentMode) {
+        case 1:
+            favicon.setAttribute("href", "images/focus-icon.ico");
+            break;
+        case 2:
+            favicon.setAttribute("href", "images/shortBreak-icon.ico");
+            break;
+        case 3:
+            favicon.setAttribute("href", "images/longBreak-icon.ico");
+            break;
+    }
+}
 
 // -- Settings Buttons --
 // Open side panel
@@ -15,7 +32,6 @@ document.querySelector('#settings').addEventListener('click', (event) => {
 
         switch (buttonId) {
             case 'buttonSettings':
-                const sidePanel = document.querySelector('#settingsControlPanel');
                 sidePanel.classList.toggle('open'); // create or remove a class if it exists or not.
                 break;
             case 'buttonSound':
@@ -24,9 +40,26 @@ document.querySelector('#settings').addEventListener('click', (event) => {
     }
 });
 
+// When time is running, settings and sound button will be hidden.
+const hideSettings = (isRunning) => {
+    const settingsSection = document.querySelector('#settings');
+
+    if (isRunning) {
+        // when time starts
+        settingsSection.classList.toggle('hidden');
+        if (sidePanel.classList.contains('open')) {
+            sidePanel.classList.toggle('open');
+        }
+    } else {
+        // when time stops
+        settingsSection.classList.toggle('hidden');
+    }
+}
+
 // This function will swap the timer play Icon
 const swapPlayerDisplay = (isRunning) => {
     const playIcon = document.querySelector('#playPause');
+
     if (isRunning) {
         playIcon.classList.replace('fa-play', 'fa-pause');
     } else {
@@ -65,14 +98,16 @@ const longBreakBackground = () => {
 // -- Sound Section --
 
 
+
+
 // --- Logic Section ---
 
 // -- Time Settings --
 
 let timeSettings = {
-    workTime: 0.1 * 60, // 25 minutes in seconds
-    shortBreak: 0.1 * 60,
-    longBreak: 0.1 * 60
+    workTime: 25 * 60, // 25 minutes in seconds
+    shortBreak: 5 * 60,
+    longBreak: 15 * 60
 };
 
 // -- Time formatter -- 
@@ -87,17 +122,38 @@ const formatTime = (totalSeconds) => {
 // then the program will know if the display must be updated based on the mode.
 let buttonPressed = 0;
 
+// Title Display script, it checks the mode and changes the title.
+const updateTimerTitleDisplay = (currentMode) => {
+    switch (currentMode) {
+        case 1:
+            document.title = "Focus: " + formatTime(timeLeft);
+            break;
+        case 2:
+            document.title = "Short Break: " + formatTime(timeLeft);
+            break;
+        case 3:
+            document.title = "Long Break: " + formatTime(timeLeft);
+            break;
+    }
+}
+
 // This function will be called when the settings change
 const updateTimerDisplay = () => {
     switch (buttonPressed) {
         case 1:
             displayTimer.textContent = formatTime(timeSettings.workTime);
+            timeLeft = timeSettings.workTime;
+            updateTimerTitleDisplay(buttonPressed);
             break;
         case 2:
             displayTimer.textContent = formatTime(timeSettings.shortBreak);
+            timeLeft = timeSettings.shortBreak;
+            updateTimerTitleDisplay(buttonPressed);
             break;
         case 3:
             displayTimer.textContent = formatTime(timeSettings.longBreak);
+            timeLeft = timeSettings.longBreak;
+            updateTimerTitleDisplay(buttonPressed);
             break;
     }
 }
@@ -137,6 +193,7 @@ const focusMode = () => {
     timeLeft = timeSettings.workTime;
     buttonPressed = 1;
     focusBackground();
+    swapFavicon(buttonPressed);
 }
 
 const shortBreakMode = () => {
@@ -144,6 +201,7 @@ const shortBreakMode = () => {
     timeLeft = timeSettings.shortBreak;
     buttonPressed = 2;
     shortBreakBackground();
+    swapFavicon(buttonPressed);
 }
 
 const longBreakMode = () => {
@@ -151,6 +209,7 @@ const longBreakMode = () => {
     timeLeft = timeSettings.longBreak;
     buttonPressed = 3;
     longBreakBackground();
+    swapFavicon(buttonPressed);
 }
 
 // -- Button Timer Script -- 
@@ -165,16 +224,19 @@ document.querySelector('#sectionBreakController').addEventListener('click', (eve
         switch (buttonId) {
             case 'buttonFocus':
                 focusMode();
+                updateTimerTitleDisplay(buttonPressed);
 
                 isRunning && document.querySelector('#buttonPlayPause').click(); // If the user changes the mode while the time is running, it will stop
                 break;
             case 'buttonShortBreak':
                 shortBreakMode();
+                updateTimerTitleDisplay(buttonPressed);
 
                 isRunning && document.querySelector('#buttonPlayPause').click();
                 break;
             case 'buttonLongBreak':
                 longBreakMode();
+                updateTimerTitleDisplay(buttonPressed);
 
                 isRunning && document.querySelector('#buttonPlayPause').click();
                 break;
@@ -187,19 +249,20 @@ let timerId = null; // Used for stopping the setInterval()
 
 let pomodoroCounter = 0; // It will count how many pomodoro has been finished
 
+// Function responsible for check how many pomodoro has been finished
 const swapMoodMode = (pomodoroFinished) => {
     if (buttonPressed == 1 && pomodoroFinished == 3) {
-        longBreakMode();
         pomodoroCounter = 0;
         buttonPressed = 3;
-    } else if (buttonPressed == 1 && pomodoroFinished !== 3) {
-        shortBreakMode();
-        buttonPressed = 2;
-    }
+        longBreakMode();
 
-    if (buttonPressed == 2 || buttonPressed == 3) {
-        focusMode();
+    } else if (buttonPressed == 1 && pomodoroFinished !== 3) {
+        buttonPressed = 2;
+        shortBreakMode();
+
+    } else if (buttonPressed == 2 || buttonPressed == 3) {
         buttonPressed = 1;
+        focusMode();
     }
 }
 
@@ -215,24 +278,30 @@ const toggleTimer = document.querySelector('#buttonPlayPause').addEventListener(
             isRunning = false;
 
             swapPlayerDisplay(isRunning);
+            hideSettings(isRunning);
         } else {
             // Starting
             isRunning = true;
             swapPlayerDisplay(isRunning);
+            hideSettings(isRunning);
 
             timerId = setInterval(() => {
             timeLeft--; // Remove 1 second
             displayTimer.textContent = formatTime(timeLeft);
-
+            updateTimerTitleDisplay(buttonPressed);
+            
+            // When time's up
             if (timeLeft <= 0) {
                 isRunning = false;
-                swapPlayerDisplay(isRunning);
-                
-                buttonPressed == 1 && (pomodoroCounter += 1);
-                swapMoodMode(pomodoroCounter);
-
                 clearInterval(timerId);
                 timerId = null;
+
+                swapPlayerDisplay(isRunning);
+                hideSettings(isRunning);
+                // Pomodoro will be marked as finished only when it is in focusMode
+                buttonPressed == 1 && (pomodoroCounter++);
+                swapMoodMode(pomodoroCounter);
+                document.querySelector('#buttonPlayPause').click(); // It will automatically start the timer when it finishes
             }
         }, 1000);
     }
