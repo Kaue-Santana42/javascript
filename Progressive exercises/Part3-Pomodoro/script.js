@@ -1,6 +1,6 @@
 // -- Get HTML elements --
-const displayTimer = document.querySelector('#theTimer');
-const sidePanel = document.querySelector('#settingsControlPanel');
+const displayTimer = document.getElementById('theTimer');
+const sidePanel = document.getElementById('settingsControlPanel');
 
 // Global Variable
 let timeLeft; 
@@ -10,7 +10,7 @@ let isRunning = false;
 
 // Favicon Swapping
 const swapFavicon = (currentMode) => {
-    const favicon = document.querySelector('#favicon');
+    const favicon = document.getElementById('favicon');
     switch (currentMode) {
         case 1:
             favicon.setAttribute("href", "images/focus-icon.ico");
@@ -26,7 +26,7 @@ const swapFavicon = (currentMode) => {
 
 // -- Settings Buttons --
 // Open side panel
-document.querySelector('#settings').addEventListener('click', (event) => {
+document.getElementById('settings').addEventListener('click', (event) => {
     if (event.target.tagName === 'BUTTON') {
         const buttonId = event.target.id;
 
@@ -42,7 +42,7 @@ document.querySelector('#settings').addEventListener('click', (event) => {
 
 // When time is running, settings and sound button will be hidden.
 const hideSettings = (isRunning) => {
-    const settingsSection = document.querySelector('#settings');
+    const settingsSection = document.getElementById('settings');
 
     if (isRunning) {
         // when time starts
@@ -58,7 +58,7 @@ const hideSettings = (isRunning) => {
 
 // This function will swap the timer play Icon
 const swapPlayerDisplay = (isRunning) => {
-    const playIcon = document.querySelector('#playPause');
+    const playIcon = document.getElementById('playPause');
 
     if (isRunning) {
         playIcon.classList.replace('fa-play', 'fa-pause');
@@ -102,13 +102,30 @@ const longBreakBackground = () => {
 
 // --- Logic Section ---
 
+// -- Storage Handler --
+
+const syncSettingsStorage = (timeConfigured) => {
+    localStorage.setItem('savedTimeSettings', JSON.stringify(timeConfigured));
+}
+
+// It will check if there is any settings already saved
+const loadSettingsStorage = () => {
+    const timeSettingsSaved = localStorage.getItem('savedTimeSettings');
+
+    if (timeSettingsSaved) {
+        return JSON.parse(timeSettingsSaved);
+    } else {
+        return {
+            workTime: 25 * 60, // 25 minutes in seconds
+            shortBreak: 5 * 60,
+            longBreak: 15 * 60
+        };
+    }
+}
+
 // -- Time Settings --
 
-let timeSettings = {
-    workTime: 25 * 60, // 25 minutes in seconds
-    shortBreak: 5 * 60,
-    longBreak: 15 * 60
-};
+let timeSettings = loadSettingsStorage();
 
 // -- Time formatter -- 
 // Called when a button is pressed
@@ -159,7 +176,7 @@ const updateTimerDisplay = () => {
 }
 
 // -- Time Settings Listener --
-document.querySelector('#settingsControlPanel').addEventListener('input', (event) => {
+document.getElementById('settingsControlPanel').addEventListener('input', (event) => {
     if (event.target.tagName === 'INPUT') {
         const value = event.target.value;
         const inputId = event.target.id;
@@ -173,17 +190,39 @@ document.querySelector('#settingsControlPanel').addEventListener('input', (event
             case 'focusTimeScrollValue':
                 timeSettings.workTime = value * 60;
                 updateTimerDisplay(); // Timer Display is updated automatically when settings is changed
+                syncSettingsStorage(timeSettings);
                 break;
             case 'shortTimeScrollValue':
                 timeSettings.shortBreak = value * 60;
                 updateTimerDisplay();
+                syncSettingsStorage(timeSettings);
                 break;
             case 'longTimeScrollValue':
                 timeSettings.longBreak = value * 60;
                 updateTimerDisplay();
+                syncSettingsStorage(timeSettings);
                 break;
         }
     }
+});
+
+// It will start at the focus mode automatically
+// Settings on the side panel will be showed according the user settings
+window.addEventListener('load', () => {
+    focusMode();
+
+    const focusSliderValue = document.getElementById('focusTimeScrollValue');
+    const shortBreakSliderValue = document.getElementById('shortTimeScrollValue');
+    const longBreakSliderValue = document.getElementById('longTimeScrollValue');   
+    
+    focusSliderValue.value = formatTime(timeSettings.workTime).slice(0, -3);
+    shortBreakSliderValue.value = formatTime(timeSettings.shortBreak).slice(0, -3);
+    longBreakSliderValue.value = formatTime(timeSettings.longBreak).slice(0, -3);
+
+    focusSliderValue.previousElementSibling.querySelector('output').textContent = focusSliderValue.value;
+    shortBreakSliderValue.previousElementSibling.querySelector('output').textContent = shortBreakSliderValue.value;
+    longBreakSliderValue.previousElementSibling.querySelector('output').textContent = longBreakSliderValue.value;
+    
 });
 
 // Modes script functions
@@ -215,7 +254,7 @@ const longBreakMode = () => {
 // -- Button Timer Script -- 
 
 // Event Delegation for break control buttons
-document.querySelector('#sectionBreakController').addEventListener('click', (event) => {
+document.getElementById('sectionBreakController').addEventListener('click', (event) => {
     // It ensures that a buttons is being clicked
     if (event.target.tagName === 'BUTTON') {
         const buttonId = event.target.id;
@@ -226,19 +265,19 @@ document.querySelector('#sectionBreakController').addEventListener('click', (eve
                 focusMode();
                 updateTimerTitleDisplay(buttonPressed);
 
-                isRunning && document.querySelector('#buttonPlayPause').click(); // If the user changes the mode while the time is running, it will stop
+                isRunning && document.getElementById('buttonPlayPause').click(); // If the user changes the mode while the time is running, it will stop
                 break;
             case 'buttonShortBreak':
                 shortBreakMode();
                 updateTimerTitleDisplay(buttonPressed);
 
-                isRunning && document.querySelector('#buttonPlayPause').click();
+                isRunning && document.getElementById('buttonPlayPause').click();
                 break;
             case 'buttonLongBreak':
                 longBreakMode();
                 updateTimerTitleDisplay(buttonPressed);
 
-                isRunning && document.querySelector('#buttonPlayPause').click();
+                isRunning && document.getElementById('buttonPlayPause').click();
                 break;
         }
     }
@@ -267,7 +306,7 @@ const swapMoodMode = (pomodoroFinished) => {
 }
 
 // -- Timer starter script --
-const toggleTimer = document.querySelector('#buttonPlayPause').addEventListener("click", () => {
+const toggleTimer = document.getElementById('buttonPlayPause').addEventListener("click", () => {
     if (buttonPressed == 0) {
         window.alert('Please, select a mode');
     } else {
@@ -301,7 +340,7 @@ const toggleTimer = document.querySelector('#buttonPlayPause').addEventListener(
                 // Pomodoro will be marked as finished only when it is in focusMode
                 buttonPressed == 1 && (pomodoroCounter++);
                 swapMoodMode(pomodoroCounter);
-                document.querySelector('#buttonPlayPause').click(); // It will automatically start the timer when it finishes
+                document.getElementById('buttonPlayPause').click(); // It will automatically start the timer when it finishes
             }
         }, 1000);
     }
