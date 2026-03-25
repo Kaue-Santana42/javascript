@@ -25,6 +25,22 @@ const swapFavicon = (currentMode) => {
 }
 
 // -- Settings Buttons --
+
+let isMuted = false;
+
+// Swap Icon to muted or not
+const swapSoundIcon = () => {
+    const soundIcon = document.getElementById('soundIcon');
+
+    if(!isMuted) {
+        soundIcon.classList.replace('fa-volume-high', 'fa-volume-xmark');
+        isMuted = true;
+    } else {
+        soundIcon.classList.replace('fa-volume-xmark', 'fa-volume-high');
+        isMuted = false;
+    }
+}
+
 // Open side panel
 document.getElementById('settings').addEventListener('click', (event) => {
     if (event.target.tagName === 'BUTTON') {
@@ -35,6 +51,7 @@ document.getElementById('settings').addEventListener('click', (event) => {
                 sidePanel.classList.toggle('open'); // create or remove a class if it exists or not.
                 break;
             case 'buttonSound':
+                swapSoundIcon();
                 break;
         }
     }
@@ -95,11 +112,6 @@ const longBreakBackground = () => {
     document.documentElement.style.setProperty('--asideSliderBorderColor', '#6127C4');
 }
 
-// -- Sound Section --
-
-
-
-
 // --- Logic Section ---
 
 // -- Storage Handler --
@@ -121,6 +133,39 @@ const loadSettingsStorage = () => {
             longBreak: 15 * 60
         };
     }
+}
+
+// -- Sound Section --
+
+// Start sound
+const playMusic = (isRunning, isMuted, currentMode) => {
+    const backgroundAudio = document.getElementById('soundSection');
+
+    // It pauses before any changes
+    backgroundAudio.pause();
+
+    if (!isRunning || isMuted) return; // Function will not work if the timer is stopped or the sound is muted.
+
+    // Assign new font
+    let track;
+    if (currentMode === 1) track = "focusMusic";
+    else if (currentMode === 2) track = "shortBreakMusic";
+    else track = "longBreakMusic";
+
+    backgroundAudio.innerHTML = `
+    <source src="sounds/${track}.ogg" type="audio/ogg">
+    <source src="sounds/${track}.mp3" type="audio/ogg">
+    `;
+
+    // Forcing the loading of the new file before play it
+    backgroundAudio.load();
+    backgroundAudio.play().catch(e => console.log("error when playing", e));
+}
+
+const playTransitionSound = (isMuted) => {
+    const transitionSound = document.getElementById('soundTranstion');
+
+    !isMuted && (transitionSound.play());
 }
 
 // -- Time Settings --
@@ -231,6 +276,7 @@ const focusMode = () => {
     displayTimer.textContent = formatTime(timeSettings.workTime);
     timeLeft = timeSettings.workTime;
     buttonPressed = 1;
+    
     focusBackground();
     swapFavicon(buttonPressed);
 }
@@ -318,11 +364,13 @@ const toggleTimer = document.getElementById('buttonPlayPause').addEventListener(
 
             swapPlayerDisplay(isRunning);
             hideSettings(isRunning);
+            playMusic(isRunning, isMuted, buttonPressed);
         } else {
             // Starting
             isRunning = true;
             swapPlayerDisplay(isRunning);
             hideSettings(isRunning);
+            playMusic(isRunning, isMuted, buttonPressed);
 
             timerId = setInterval(() => {
             timeLeft--; // Remove 1 second
@@ -340,6 +388,7 @@ const toggleTimer = document.getElementById('buttonPlayPause').addEventListener(
                 // Pomodoro will be marked as finished only when it is in focusMode
                 buttonPressed == 1 && (pomodoroCounter++);
                 swapMoodMode(pomodoroCounter);
+                playTransitionSound(isMuted);
                 document.getElementById('buttonPlayPause').click(); // It will automatically start the timer when it finishes
             }
         }, 1000);
