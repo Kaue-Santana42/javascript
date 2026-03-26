@@ -5,6 +5,10 @@ const sidePanel = document.getElementById('settingsControlPanel');
 // Global Variable
 let timeLeft; 
 let isRunning = false;
+let isMuted = false;
+// This variable will be useful to identify what was the last button pressed, 
+// then the program will know if the display must be updated based on the mode.
+let buttonPressed = 0;
 
 // --- CSS Section ---
 
@@ -22,11 +26,9 @@ const swapFavicon = (currentMode) => {
             favicon.setAttribute("href", "images/longBreak-icon.ico");
             break;
     }
-}
+};
 
 // -- Settings Buttons --
-
-let isMuted = false;
 
 // Swap Icon to muted or not
 const swapSoundIcon = () => {
@@ -39,7 +41,7 @@ const swapSoundIcon = () => {
         soundIcon.classList.replace('fa-volume-xmark', 'fa-volume-high');
         isMuted = false;
     }
-}
+};
 
 // Open side panel
 document.getElementById('settings').addEventListener('click', (event) => {
@@ -71,7 +73,7 @@ const hideSettings = (isRunning) => {
         // when time stops
         settingsSection.classList.toggle('hidden');
     }
-}
+};
 
 // This function will swap the timer play Icon
 const swapPlayerDisplay = (isRunning) => {
@@ -82,35 +84,28 @@ const swapPlayerDisplay = (isRunning) => {
     } else {
         playIcon.classList.replace('fa-pause', 'fa-play');
     }
-}
+};
 
 // Changing background and buttons color according the mode
-const focusBackground = () => {
-    const bodyBackground = document.querySelector('body');
-    bodyBackground.style.setProperty('--background-color-two', '#6E3232');
-    bodyBackground.style.setProperty('--background-color-three', '#C42727');
+// Object responsible for the colors
+const themes = {
+    focus: {sec: '#6E3232', ter: '#C42727'},
+    short: {sec: '#2E2E59', ter: '#2734C4'},
+    long: {sec: '#251D3B', ter: '#6127C4'}
+};
+// Theme update's logic
+const updateTheme = (colorSecondary, colorTertiary, sliderColor) => {
+    const root = document.documentElement;
+    const body = document.body;
 
-    document.documentElement.style.setProperty('--buttonColor', '#101010 0%, #6E3232 35%, #C42727 100%');
-    document.documentElement.style.setProperty('--asideSliderBorderColor', '#C42727');
-}
+    // Updates the background gradient
+    body.style.setProperty('--background-color-two', colorSecondary);
+    body.style.setProperty('--background-color-three', colorTertiary);
 
-const shortBreakBackground = () => {
-    const bodyBackground = document.querySelector('body');  
-    bodyBackground.style.setProperty('--background-color-two', '#2E2E59');
-    bodyBackground.style.setProperty('--background-color-three', '#2734C4');
-
-    document.documentElement.style.setProperty('--buttonColor', '#101010 0%, #2E2E59 35%, #2734C4 100%');
-    document.documentElement.style.setProperty('--asideSliderBorderColor', '#2734C4');
-}
-
-const longBreakBackground = () => {
-    const bodyBackground = document.querySelector('body');  
-    bodyBackground.style.setProperty('--background-color-two', '#251D3B');
-    bodyBackground.style.setProperty('--background-color-three', '#6127C4');
-
-    document.documentElement.style.setProperty('--buttonColor', '#101010 0%, #251D3B 35%, #6127C4 100%');
-    document.documentElement.style.setProperty('--asideSliderBorderColor', '#6127C4');
-}
+    // Updates the components' color (buttons and sliders)
+    root.style.setProperty('--buttonColor', `#101010 0%, ${colorSecondary} 35%, ${colorTertiary} 100%`);
+    root.style.setProperty('--asideSliderBorderColor', sliderColor);
+};
 
 // --- Logic Section ---
 
@@ -118,7 +113,7 @@ const longBreakBackground = () => {
 
 const syncSettingsStorage = (timeConfigured) => {
     localStorage.setItem('savedTimeSettings', JSON.stringify(timeConfigured));
-}
+};
 
 // It will check if there is any settings already saved
 const loadSettingsStorage = () => {
@@ -133,40 +128,47 @@ const loadSettingsStorage = () => {
             longBreak: 15 * 60
         };
     }
-}
+};
 
 // -- Sound Section --
 
+const sounds = {
+    focus: new Audio('sounds/focusMusic.mp3'),
+    short: new Audio('sounds/shortBreakMusic.mp3'),
+    long: new Audio('sounds/longBreakMusic.mp3'),
+    transition: new Audio('sounds/transitionSound.mp3')
+};
+
+// Initial settings
+Object.values(sounds).forEach(sound => {
+    sound.loop = (sound !== sounds.transition); // All in loop, except transition
+});
+
+const stopAllMusic = () => {
+    sounds.focus.pause();
+    sounds.short.pause();
+    sounds.long.pause();
+};
+
 // Start sound
 const playMusic = (isRunning, isMuted, currentMode) => {
-    const backgroundAudio = document.getElementById('soundSection');
+   stopAllMusic();
 
-    // It pauses before any changes
-    backgroundAudio.pause();
+    if (!isRunning || isMuted) return;
 
-    if (!isRunning || isMuted) return; // Function will not work if the timer is stopped or the sound is muted.
+    // Play the music based on the mode
+    if(currentMode === 1) sounds.focus.play().catch(error => console.log("Error Playing: ", error));
+    if(currentMode === 2) sounds.short.play().catch(error => console.log("Error Playing: ", error));
+    if(currentMode === 3) sounds.long.play().catch(error => console.log("Error Playing: ", error));
 
-    // Assign new font
-    let track;
-    if (currentMode === 1) track = "focusMusic";
-    else if (currentMode === 2) track = "shortBreakMusic";
-    else track = "longBreakMusic";
-
-    backgroundAudio.innerHTML = `
-    <source src="sounds/${track}.ogg" type="audio/ogg">
-    <source src="sounds/${track}.mp3" type="audio/ogg">
-    `;
-
-    // Forcing the loading of the new file before play it
-    backgroundAudio.load();
-    backgroundAudio.play().catch(e => console.log("error when playing", e));
-}
+    // play() returns a 'promise object', if doesn't work, catch() will intervene and catch the error, otherwise the code would stop with it. 
+};
 
 const playTransitionSound = (isMuted) => {
-    const transitionSound = document.getElementById('soundTranstion');
-
-    !isMuted && (transitionSound.play());
-}
+    stopAllMusic();
+    
+    if (!isMuted) sounds.transition.play().catch(error => console.log("Error Playing: ", error));
+};
 
 // -- Time Settings --
 
@@ -178,11 +180,7 @@ const formatTime = (totalSeconds) => {
     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
     const seconds = String(totalSeconds % 60).padStart(2, '0');
     return `${minutes}:${seconds}`;
-}
-
-// This variable will be useful to identify what was the last button pressed, 
-// then the program will know if the display must be updated based on the mode.
-let buttonPressed = 0;
+};
 
 // Title Display script, it checks the mode and changes the title.
 const updateTimerTitleDisplay = (currentMode) => {
@@ -197,7 +195,7 @@ const updateTimerTitleDisplay = (currentMode) => {
             document.title = "Long Break: " + formatTime(timeLeft);
             break;
     }
-}
+};
 
 // This function will be called when the settings change
 const updateTimerDisplay = () => {
@@ -218,7 +216,7 @@ const updateTimerDisplay = () => {
             updateTimerTitleDisplay(buttonPressed);
             break;
     }
-}
+};
 
 // -- Time Settings Listener --
 document.getElementById('settingsControlPanel').addEventListener('input', (event) => {
@@ -277,25 +275,27 @@ const focusMode = () => {
     timeLeft = timeSettings.workTime;
     buttonPressed = 1;
     
-    focusBackground();
+    updateTheme(themes.focus.sec, themes.focus.ter, themes.focus.ter);
     swapFavicon(buttonPressed);
-}
+};
 
 const shortBreakMode = () => {
     displayTimer.textContent = formatTime(timeSettings.shortBreak);
     timeLeft = timeSettings.shortBreak;
     buttonPressed = 2;
-    shortBreakBackground();
+    
+    updateTheme(themes.short.sec, themes.short.ter, themes.short.ter);
     swapFavicon(buttonPressed);
-}
+};
 
 const longBreakMode = () => {
     displayTimer.textContent = formatTime(timeSettings.longBreak);
     timeLeft = timeSettings.longBreak;
     buttonPressed = 3;
-    longBreakBackground();
+
+    updateTheme(themes.long.sec, themes.long.ter, themes.long.ter);
     swapFavicon(buttonPressed);
-}
+};
 
 // -- Button Timer Script -- 
 
@@ -349,7 +349,7 @@ const swapMoodMode = (pomodoroFinished) => {
         buttonPressed = 1;
         focusMode();
     }
-}
+};
 
 // -- Timer starter script --
 const toggleTimer = document.getElementById('buttonPlayPause').addEventListener("click", () => {
