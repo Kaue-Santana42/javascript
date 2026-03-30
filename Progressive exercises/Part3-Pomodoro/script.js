@@ -13,17 +13,23 @@ let buttonPressed = 0;
 // --- CSS Section ---
 
 // Favicon Swapping
+const favicons = {
+    focus: "images/focus-icon.ico",
+    short: "images/shortBreak-icon.ico",
+    long: "images/longBreak-icon.ico"
+};
+
 const swapFavicon = (currentMode) => {
     const favicon = document.getElementById('favicon');
     switch (currentMode) {
         case 1:
-            favicon.setAttribute("href", "images/focus-icon.ico");
+            favicon.setAttribute("href", favicons.focus);
             break;
         case 2:
-            favicon.setAttribute("href", "images/shortBreak-icon.ico");
+            favicon.setAttribute("href", favicons.short);
             break;
         case 3:
-            favicon.setAttribute("href", "images/longBreak-icon.ico");
+            favicon.setAttribute("href", favicons.long);
             break;
     }
 };
@@ -105,6 +111,19 @@ const updateTheme = (colorSecondary, colorTertiary, sliderColor) => {
     // Updates the components' color (buttons and sliders)
     root.style.setProperty('--buttonColor', `#101010 0%, ${colorSecondary} 35%, ${colorTertiary} 100%`);
     root.style.setProperty('--asideSliderBorderColor', sliderColor);
+};
+
+// Function resposible for updating the visual pomodoro markers
+const updateVisualMarkers = (count) => {
+    const markers = document.querySelectorAll('.marker');
+
+    markers.forEach((marker, index) => {
+        if (index < count) {
+            marker.classList.add('active');
+        } else {
+            marker.classList.remove('active');
+        }
+    });
 };
 
 // --- Logic Section ---
@@ -249,11 +268,8 @@ document.getElementById('settingsControlPanel').addEventListener('input', (event
     }
 });
 
-// It will start at the focus mode automatically
 // Settings on the side panel will be showed according the user settings
-window.addEventListener('load', () => {
-    focusMode();
-
+const loadSliderSettingsDisplay = () => {
     const focusSliderValue = document.getElementById('focusTimeScrollValue');
     const shortBreakSliderValue = document.getElementById('shortTimeScrollValue');
     const longBreakSliderValue = document.getElementById('longTimeScrollValue');   
@@ -265,7 +281,12 @@ window.addEventListener('load', () => {
     focusSliderValue.previousElementSibling.querySelector('output').textContent = focusSliderValue.value;
     shortBreakSliderValue.previousElementSibling.querySelector('output').textContent = shortBreakSliderValue.value;
     longBreakSliderValue.previousElementSibling.querySelector('output').textContent = longBreakSliderValue.value;
-    
+}
+
+// It will start at the focus mode automatically
+window.addEventListener('load', () => {
+    focusMode();
+    loadSliderSettingsDisplay();
 });
 
 // Modes script functions
@@ -336,23 +357,27 @@ let pomodoroCounter = 0; // It will count how many pomodoro has been finished
 
 // Function responsible for check how many pomodoro has been finished
 const swapMoodMode = (pomodoroFinished) => {
-    if (buttonPressed == 1 && pomodoroFinished == 3) {
-        pomodoroCounter = 0;
+    if (buttonPressed == 1 && pomodoroFinished == 4) {
         buttonPressed = 3;
         longBreakMode();
 
-    } else if (buttonPressed == 1 && pomodoroFinished !== 3) {
+    } else if (buttonPressed == 1 && pomodoroFinished !== 4) {
         buttonPressed = 2;
         shortBreakMode();
 
     } else if (buttonPressed == 2 || buttonPressed == 3) {
         buttonPressed = 1;
         focusMode();
+
+        if (pomodoroCounter == 4) { // The user will see the 4 pomodoro counters filled
+            updateVisualMarkers(0);
+            pomodoroCounter = 0;
+        }
     }
 };
 
 // -- Timer starter script --
-const toggleTimer = document.getElementById('buttonPlayPause').addEventListener("click", () => {
+const handleTimerToggle = () => {
     if (buttonPressed == 0) {
         window.alert('Please, select a mode');
     } else {
@@ -368,6 +393,8 @@ const toggleTimer = document.getElementById('buttonPlayPause').addEventListener(
         } else {
             // Starting
             isRunning = true;
+            clearInterval(timerId); // It ensures that the timerId was cleared
+
             swapPlayerDisplay(isRunning);
             hideSettings(isRunning);
             playMusic(isRunning, isMuted, buttonPressed);
@@ -385,14 +412,17 @@ const toggleTimer = document.getElementById('buttonPlayPause').addEventListener(
 
                 swapPlayerDisplay(isRunning);
                 hideSettings(isRunning);
-                // Pomodoro will be marked as finished only when it is in focusMode
-                buttonPressed == 1 && (pomodoroCounter++);
-                swapMoodMode(pomodoroCounter);
                 playTransitionSound(isMuted);
-                document.getElementById('buttonPlayPause').click(); // It will automatically start the timer when it finishes
+                // Pomodoro will be marked as finished only when it is in focusMode
+                buttonPressed == 1 && (pomodoroCounter++)
+                updateVisualMarkers(pomodoroCounter);
+                swapMoodMode(pomodoroCounter);
+                updateTimerTitleDisplay(buttonPressed);
+                handleTimerToggle(); // It will automatically start the timer when it finishes
             }
-        }, 1000);
+            }, 1000);
+        }
     }
-    }
+};
 
-});
+document.getElementById('buttonPlayPause').addEventListener("click", handleTimerToggle);

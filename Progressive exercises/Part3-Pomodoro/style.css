@@ -68,7 +68,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 8em;
+    gap: 7em;
 
     padding: 15px;
     height: 70dvh;
@@ -139,7 +139,7 @@ i {
     flex-direction: column;
     align-items: center;
 
-    gap: 5px;
+    gap: 7px;
 }
 
 #sectionTimer button:hover {
@@ -163,6 +163,25 @@ i {
     justify-content: space-between;
     width: 80%;
     height: 4em;
+}
+
+#pomodoroMarkers {
+    display: flex;
+    gap: 10px;
+}
+
+.marker {
+    width: 15px;
+    height: 15px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+}
+
+.marker.active {
+    background-color: var(--asideSliderBorderColor);
+    border-color: var(--asideSliderBorderColor);
+    transform: scale(1.2);
 }
 
 /* Properties for button gradient's animation */
