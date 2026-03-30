@@ -1,6 +1,7 @@
 // -- Get HTML elements --
 const displayTimer = document.getElementById('theTimer');
 const sidePanel = document.getElementById('settingsControlPanel');
+const settingsOptions = document.getElementById('settings');
 
 // Global Variable
 let timeLeft; 
@@ -50,7 +51,7 @@ const swapSoundIcon = () => {
 };
 
 // Open side panel
-document.getElementById('settings').addEventListener('click', (event) => {
+settingsOptions.addEventListener('click', (event) => {
     if (event.target.tagName === 'BUTTON') {
         const buttonId = event.target.id;
 
@@ -62,6 +63,13 @@ document.getElementById('settings').addEventListener('click', (event) => {
                 swapSoundIcon();
                 break;
         }
+    }
+});
+
+// Side panel will close when click out of it
+document.addEventListener('click', (event) => {
+    if (!sidePanel.contains(event.target) && !settingsOptions.contains(event.target)) {
+        sidePanel.classList.remove('open');
     }
 });
 
@@ -295,6 +303,11 @@ const focusMode = () => {
     displayTimer.textContent = formatTime(timeSettings.workTime);
     timeLeft = timeSettings.workTime;
     buttonPressed = 1;
+
+    if (pomodoroCounter == 4) { // The user will see the 4 pomodoro counters filled
+            updateVisualMarkers(0);
+            pomodoroCounter = 0;
+        }
     
     updateTheme(themes.focus.sec, themes.focus.ter, themes.focus.ter);
     swapFavicon(buttonPressed);
@@ -368,11 +381,6 @@ const swapMoodMode = (pomodoroFinished) => {
     } else if (buttonPressed == 2 || buttonPressed == 3) {
         buttonPressed = 1;
         focusMode();
-
-        if (pomodoroCounter == 4) { // The user will see the 4 pomodoro counters filled
-            updateVisualMarkers(0);
-            pomodoroCounter = 0;
-        }
     }
 };
 

@@ -58,6 +58,8 @@ body {
 }
 
 header {
+    text-align: center;
+
     margin: 1% 0%;
     font-family: var(--highlightedTypeFacea);
     color: var(--asideFontColor);
